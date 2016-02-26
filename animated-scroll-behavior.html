@@ -28,37 +28,46 @@ Example:
    * `AnimatedScrollBehavior` is implemented by an element in order to scroll down the page somewhere.
    * @polymerBehavior
    */
-  AnimatedScrollBehavior = [
-    Polymer.NeonAnimatableBehavior,
-    Polymer.NeonAnimationRunnerBehavior,
-    {
-      properties: {
-        scrollTo: {
-          type: String
-        },
+  AnimatedScrollBehavior = {
+    properties: {
+      scrollTo: {
+        type: String
       },
-      animationConfig: {
-        value: function() {
-          return {
-            'entry': {
-              name: 'page-scroll-animation'
-            },
-            'exit': {
+    },
+    listeners: {
+      click: '_scrollToElement'
+    },
+    scrollTo: function(v) {
+      this._scrollToElement();
+    },
+    _scrollToElement: function() {
+      var top = this.querySelector(this.scrollTo);
 
-            }
-          }
+      // Easing functions: @TODO make configurable
+      //jshint ignore:start
+      var easingFn = function easeOutQuad(t, b, c, d) {
+        t /= d;
+        return -c * (t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1) + b;
+      };
+      //jshint ignore:end
+
+      var animationId = Math.random();
+      var duration = 1000;
+      var startTime = Date.now();
+      var currentScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      var deltaScrollTop = currentScrollTop - top;
+      this._currentAnimationId = animationId;
+      (function updateFrame() {
+        var now = Date.now();
+        var elapsedTime = now - startTime;
+        if (elapsedTime > duration) {
+          window.scroll(0, top);
+        } else if (this._currentAnimationId === animationId) {
+          window.scroll(0, easingFn(elapsedTime, currentScrollTop, deltaScrollTop, duration));
+          requestAnimationFrame(updateFrame.bind(this));
         }
-      },
-      listeners: {
-        click: '_scrollToElement'
-      },
-      scrollTo: function(v) {
-        this._scrollToElement();
-      },
-      _scrollToElement: function() {
+      }).call(this);
+    },
 
-      },
-
-    }
-  ];
+  }
 </script>
