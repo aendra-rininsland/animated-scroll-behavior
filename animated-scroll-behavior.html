@@ -38,50 +38,43 @@ Example:
       scrollTo: {
         type: String
       },
-      animationConfig: {
+      easing: {
+        type: String,
         value: function() {
-          return {
-            name: 'page-scroll-animation',
-            node: this.scrollTo
-          };
+          return 'ease-in-out'
         }
+      },
+      animationConfig: {
+        computed: '_computeAnimationConfig(scrollTo, easing)'
       }
     },
+
     listeners: {
-      click: '_scrollToElement'
+      click: '_scrollToElement',
+      'neon-animation-finish': '_onNeonAnimationFinish'
     },
+
     scroll: function(v) {
       this._scrollToElement();
     },
+
     _scrollToElement: function() {
       this.playAnimation();
-      // var top = document.querySelector(this.scrollTo).scrollTop;
-      //
-      // // Easing functions: @TODO make configurable
-      // //jshint ignore:start
-      // var easingFn = function easeOutQuad(t, b, c, d) {
-      //   t /= d;
-      //   return -c * (t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1) + b;
-      // };
-      // //jshint ignore:end
-      //
-      // var animationId = Math.random();
-      // var duration = 1000;
-      // var startTime = Date.now();
-      // var currentScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-      // var deltaScrollTop = currentScrollTop - top;
-      // this._currentAnimationId = animationId;
-      // (function updateFrame() {
-      //   var now = Date.now();
-      //   var elapsedTime = now - startTime;
-      //   if (elapsedTime > duration) {
-      //     window.scroll(0, top);
-      //   } else if (this._currentAnimationId === animationId) {
-      //     window.scroll(0, easingFn(elapsedTime, currentScrollTop, deltaScrollTop, duration));
-      //     requestAnimationFrame(updateFrame.bind(this));
-      //   }
-      // }).call(this);
     },
 
+    _computeAnimationConfig: function(nodeString, easingString) {
+      return {
+        name: 'page-scroll-animation',
+        node: nodeString,
+        timing: {
+          easing: easingString
+        }
+      };
+    },
+
+    _onNeonAnimationFinish: function() {
+      console.log('wheee');
+      window.scroll(0, node.offsetTop);
+    }
   }
 </script>

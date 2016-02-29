@@ -13,12 +13,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../neon-animation/web-animations.html">
 
 <!--
-`<fade-in-animation>` animates the opacity of an element from 0 to 1.
+`<page-scroll-animation>` animates the opacity of an element from 0 to 1.
 
 Configuration:
 ```
 {
-  name: 'fade-in-animation',
+  name: 'page-scroll-animation',
   node: <node>
   timing: <animation-timing>
 }
@@ -36,16 +36,24 @@ Configuration:
     ],
 
     configure: function(config) {
-      var node = config.node;
-      console.log(config.node);
+      var node = document.querySelector(config.node);
+      var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      var deltaScroll = node.offsetTop - currentScroll;
+
       this._effect = new KeyframeEffect(node, [], this.timingFromConfig(config));
       this._effect.onsample = function(timeFraction, effect, animation) {
-        node.scrollTop = node.scrollTop + timeFraction * 500;
+        if (timeFraction > 0) {
+          window.scroll(0, node.offsetTop * timeFraction);
+        }
       };
 
       return this._effect;
-    }
+    },
 
+    // complete: function(config) {
+    //   var node = document.querySelector(config.node);
+    //   window.scroll(0, node.offsetTop);
+    // }
   });
 
 </script>
