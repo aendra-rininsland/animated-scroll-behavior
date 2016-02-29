@@ -11,6 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../neon-animation/neon-animatable-behavior.html">
 <link rel="import" href="../neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="page-scroll-animation.html">
 
 <!--
 A behavior for scrolling the user down the page.
@@ -29,44 +30,57 @@ Example:
    * @polymerBehavior
    */
   AnimatedScrollBehavior = {
+    behavior: [
+      Polymer.NeonAnimationBehavior,
+      Polymer.NeonAnimationRunnerBehavior
+    ],
     properties: {
       scrollTo: {
         type: String
       },
+      animationConfig: {
+        value: function() {
+          return {
+            name: 'page-scroll-animation',
+            node: this.scrollTo
+          };
+        }
+      }
     },
     listeners: {
       click: '_scrollToElement'
     },
-    scrollTo: function(v) {
+    scroll: function(v) {
       this._scrollToElement();
     },
     _scrollToElement: function() {
-      var top = this.querySelector(this.scrollTo);
-
-      // Easing functions: @TODO make configurable
-      //jshint ignore:start
-      var easingFn = function easeOutQuad(t, b, c, d) {
-        t /= d;
-        return -c * (t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1) + b;
-      };
-      //jshint ignore:end
-
-      var animationId = Math.random();
-      var duration = 1000;
-      var startTime = Date.now();
-      var currentScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-      var deltaScrollTop = currentScrollTop - top;
-      this._currentAnimationId = animationId;
-      (function updateFrame() {
-        var now = Date.now();
-        var elapsedTime = now - startTime;
-        if (elapsedTime > duration) {
-          window.scroll(0, top);
-        } else if (this._currentAnimationId === animationId) {
-          window.scroll(0, easingFn(elapsedTime, currentScrollTop, deltaScrollTop, duration));
-          requestAnimationFrame(updateFrame.bind(this));
-        }
-      }).call(this);
+      this.playAnimation();
+      // var top = document.querySelector(this.scrollTo).scrollTop;
+      //
+      // // Easing functions: @TODO make configurable
+      // //jshint ignore:start
+      // var easingFn = function easeOutQuad(t, b, c, d) {
+      //   t /= d;
+      //   return -c * (t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1) + b;
+      // };
+      // //jshint ignore:end
+      //
+      // var animationId = Math.random();
+      // var duration = 1000;
+      // var startTime = Date.now();
+      // var currentScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      // var deltaScrollTop = currentScrollTop - top;
+      // this._currentAnimationId = animationId;
+      // (function updateFrame() {
+      //   var now = Date.now();
+      //   var elapsedTime = now - startTime;
+      //   if (elapsedTime > duration) {
+      //     window.scroll(0, top);
+      //   } else if (this._currentAnimationId === animationId) {
+      //     window.scroll(0, easingFn(elapsedTime, currentScrollTop, deltaScrollTop, duration));
+      //     requestAnimationFrame(updateFrame.bind(this));
+      //   }
+      // }).call(this);
     },
 
   }

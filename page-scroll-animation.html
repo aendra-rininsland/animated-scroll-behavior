@@ -8,9 +8,9 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../neon-animation-behavior.html">
-<link rel="import" href="../web-animations.html">
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../neon-animation/neon-animation-behavior.html">
+<link rel="import" href="../neon-animation/web-animations.html">
 
 <!--
 `<fade-in-animation>` animates the opacity of an element from 0 to 1.
@@ -28,19 +28,21 @@ Configuration:
 <script>
 
   Polymer({
-
     is: 'page-scroll-animation',
 
     behaviors: [
-      Polymer.NeonAnimationBehavior
+      Polymer.NeonAnimationBehavior,
+      Polymer.NeonAnimationRunnerBehavior
     ],
 
     configure: function(config) {
       var node = config.node;
-      this._effect = new KeyframeEffect(node, [
-        {'opacity': '0'},
-        {'opacity': '1'}
-      ], this.timingFromConfig(config));
+      console.log(config.node);
+      this._effect = new KeyframeEffect(node, [], this.timingFromConfig(config));
+      this._effect.onsample = function(timeFraction, effect, animation) {
+        node.scrollTop = node.scrollTop + timeFraction * 500;
+      };
+
       return this._effect;
     }
 
