@@ -43,17 +43,17 @@ Configuration:
       this._effect = new KeyframeEffect(node, [], this.timingFromConfig(config));
       this._effect.onsample = function(timeFraction, effect, animation) {
         if (timeFraction > 0) {
-          window.scroll(0, node.offsetTop * timeFraction);
+          window.scrollBy(0, deltaScroll * timeFraction);
         }
       };
 
       return this._effect;
     },
 
-    // complete: function(config) {
-    //   var node = document.querySelector(config.node);
-    //   window.scroll(0, node.offsetTop);
-    // }
+    complete: function(config) {
+      var node = document.querySelector(config.node);
+      window.scroll(0, node.offsetTop);
+    }
   });
 
 </script>
