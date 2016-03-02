@@ -13,39 +13,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../neon-animation/neon-animation-runner-behavior.html">
 <link rel="import" href="page-scroll-animation.html">
 
-<!--
-A behavior for scrolling the user down the page.
-
-Example:
-
-    <animated-scroll-behavior></animated-scroll-behavior>
-
-@demo demo/index.html
-@hero hero.svg
--->
-
 <script type="text/javascript">
   /**
    * `AnimatedScrollBehavior` is implemented by an element in order to scroll down the page somewhere.
-   * @polymerBehavior
+   * @polymerBehavior AnimatedScrollBehavior
    */
-  AnimatedScrollBehavior = {
-    behavior: [
-      Polymer.NeonAnimationBehavior,
-      Polymer.NeonAnimationRunnerBehavior
-    ],
+  AnimatedScrollBehaviorImpl = {
     properties: {
+      /**
+       * The target element to scroll to.
+       * @type {String}
+       */
       scrollTo: {
         type: String
       },
+
+      /**
+       * The CSS easing to use.
+       * @type {String}
+       */
       easing: {
         type: String,
         value: function() {
           return 'ease-in-out'
         }
-      },
-      animationConfig: {
-        computed: '_computeAnimationConfig(scrollTo, easing)'
       }
     },
 
@@ -54,7 +45,11 @@ Example:
       'neon-animation-finish': '_onNeonAnimationFinish'
     },
 
-    scroll: function(v) {
+    /**
+     * Programmatically scroll to the target.
+     * @return {void}
+     */
+    scroll: function() {
       this._scrollToElement();
     },
 
@@ -70,11 +65,15 @@ Example:
           easing: easingString
         }
       };
-    },
-
-    _onNeonAnimationFinish: function() {
-      console.log('wheee');
-      window.scroll(0, node.offsetTop);
     }
   }
+
+  AnimatedScrollBehaviorImpl.properties.animationConfig = {
+    computed: '_computeAnimationConfig(scrollTo, easing)'
+  }
+
+  /**
+   * @polymerBehavior
+   */
+  AnimatedScrollBehavior = [Polymer.NeonAnimationBehavior, Polymer.NeonAnimationRunnerBehavior, AnimatedScrollBehaviorImpl]
 </script>

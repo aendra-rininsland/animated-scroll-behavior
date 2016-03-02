@@ -13,7 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../neon-animation/web-animations.html">
 
 <!--
-`<page-scroll-animation>` animates the opacity of an element from 0 to 1.
+`<page-scroll-animation>` animates the scrolling of a page in the direction of a target node.
 
 Configuration:
 ```
@@ -42,8 +42,8 @@ Configuration:
 
       this._effect = new KeyframeEffect(node, [], this.timingFromConfig(config));
       this._effect.onsample = function(timeFraction, effect, animation) {
-        if (timeFraction > 0) {
-          window.scrollBy(0, deltaScroll * timeFraction);
+        if (timeFraction > 0 && timeFraction < 1) {
+          window.scroll(0, ((1-timeFraction)*currentScroll) + (timeFraction*node.offsetTop));
         }
       };
 
