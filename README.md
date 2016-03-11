@@ -1,7 +1,28 @@
 # animated-scroll-behavior
 
-An element providing a starting point for your own reusable Polymer elements.
+A generic behavior for visually scrolling the page ("smooth scrolling," as the kids used to say).
 
+## Usage
+
+1. First define AnimatedScrollBehavior as a behavior on an element.
+
+```javascript
+Polymer({
+  is: 'scroll-button',
+  extends: 'button',
+  behaviors: [
+    AnimatedScrollBehavior
+  ]
+});
+```
+
+In this case we're merely extending the native `button` element.
+
+2. Specify a selector in the `scroll-to` attribute. Optionally supply an easing function:
+
+`<button is="scroll-button" scroll-to="#the-end" easing="cubic-bezier(0.1, 0.7, 1.0, 0.1)"></button>`
+
+3. The behavior will listen for click and tap events and then scroll there, using the specified easing.
 
 ## Dependencies
 
@@ -15,7 +36,7 @@ Then, go ahead and download the element's dependencies:
     bower install
 
 
-## Playing With Your Element
+## Playing with `animated-scroll-behavior`
 
 If you wish to work on your element in isolation, we recommend that you use
 [Polyserve](https://github.com/PolymerLabs/polyserve) to keep your element's
@@ -31,7 +52,7 @@ Once running, you can preview your element at
 `http://localhost:8080/components/animated-scroll-behavior/`, where `animated-scroll-behavior` is the name of the directory containing it.
 
 
-## Testing Your Element
+## Running tests
 
 Simply navigate to the `/test` directory of your element to run its tests. If
 you are using Polyserve: `http://localhost:8080/components/animated-scroll-behavior/test/`
@@ -54,8 +75,3 @@ Then, you can run your tests on _all_ of your local browsers via:
 `wct -p` will keep the browsers alive after test runs (refresh to re-run).
 
 `wct test/some-file.html` will test only the files you specify.
-
-
-## Yeoman support
-
-If you'd like to use Yeoman to scaffold your element that's possible. The official [`generator-polymer`](https://github.com/yeoman/generator-polymer) generator has a [`seed`](https://github.com/yeoman/generator-polymer#seed) subgenerator.

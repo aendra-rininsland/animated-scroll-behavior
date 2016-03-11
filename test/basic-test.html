@@ -18,52 +18,67 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <!-- Step 1: import the element to test -->
     <link rel="import" href="../animated-scroll-behavior.html">
+    <link rel="import" href="test-element.html">
   </head>
   <body>
 
     <!-- You can use the document as a place to set up your fixtures. -->
     <test-fixture id="animated-scroll-behavior-fixture">
+      <h1 id="the-top">Welcome to #the-top!</h1>
+      <div style="height: 5000px; background: black;"></div>
+      <h1 id="the-middle">Welcome to #the-middle!</h1>
+      <div style="height: 5000px; background: black;"></div>
+      <h1 id="the-bottom">Welcome to #the-bottom!</h1>
+
       <template>
-        <animated-scroll-behavior>
-          <h2>animated-scroll-behavior</h2>
-        </animated-scroll-behavior>
+        <button id="scroll-to-bottom" is="scroll-button" scroll-to="#the-bottom">Scroll to the bottom!</button>
+        <button id="scroll-to-middle-top" is="scroll-button" scroll-to="#the-middle">Scroll to the middle!</button>
+        <button id="scroll-to-top" is="scroll-button" scroll-to="#the-top">Scroll to the top!</button>
+        <button id="scroll-to-middle-bottom" is="scroll-button" scroll-to="#the-top">Scroll to the middle!</button>
       </template>
     </test-fixture>
 
     <script>
-      suite('<animated-scroll-behavior>', function() {
+      suite('AnimatedScrollBehavior', function() {
 
-        var myEl;
+        var doc;
 
         setup(function() {
-          myEl = fixture('animated-scroll-behavior-fixture');
+          doc = fixture('animated-scroll-behavior-fixture');
         });
 
-        test('defines the "author" property', function() {
-          assert.equal(myEl.author.name, 'Dimitri Glazkov');
-          assert.equal(myEl.author.image, 'http://addyosmani.com/blog/wp-content/uploads/2013/04/unicorn.jpg');
+        test('scrolls to the bottom of the page' ,function() {
+          var toBottom = doc[0];
+          toBottom.scroll();
+          window.scroll(0, 999999);
+          console.log(document.documentElement.scrollTop || document.body.scrollTop);
         });
 
-        test('says hello', function() {
-          assert.equal(myEl.sayHello(), 'animated-scroll-behavior says, Hello World!');
-
-          var greetings = myEl.sayHello('greetings Earthlings');
-          assert.equal(greetings, 'animated-scroll-behavior says, greetings Earthlings');
-        });
-
-        test('fires lasers', function(done) {
-          myEl.addEventListener('animated-scroll-behavior-lasers', function(event) {
-            assert.equal(event.detail.sound, 'Pew pew!');
-            done();
-          });
-          myEl.fireLasers();
-        });
-
-        test('distributed children', function() {
-          var els = myEl.getContentChildren();
-          assert.equal(els.length, 1, 'one distributed node');
-          assert.equal(els[0], myEl.querySelector('h2'), 'content distributed correctly');
-        });
+        // test('defines the "author" property', function() {
+        //   assert.equal(myEl.author.name, 'Dimitri Glazkov');
+        //   assert.equal(myEl.author.image, 'http://addyosmani.com/blog/wp-content/uploads/2013/04/unicorn.jpg');
+        // });
+        //
+        // test('says hello', function() {
+        //   assert.equal(myEl.sayHello(), 'animated-scroll-behavior says, Hello World!');
+        //
+        //   var greetings = myEl.sayHello('greetings Earthlings');
+        //   assert.equal(greetings, 'animated-scroll-behavior says, greetings Earthlings');
+        // });
+        //
+        // test('fires lasers', function(done) {
+        //   myEl.addEventListener('animated-scroll-behavior-lasers', function(event) {
+        //     assert.equal(event.detail.sound, 'Pew pew!');
+        //     done();
+        //   });
+        //   myEl.fireLasers();
+        // });
+        //
+        // test('distributed children', function() {
+        //   var els = myEl.getContentChildren();
+        //   assert.equal(els.length, 1, 'one distributed node');
+        //   assert.equal(els[0], myEl.querySelector('h2'), 'content distributed correctly');
+        // });
 
       });
     </script>

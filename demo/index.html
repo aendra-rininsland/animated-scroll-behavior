@@ -20,7 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <p>An example of <code>&lt;animated-scroll-behavior&gt;</code>:</p>
 
-    <p><button is="scroll-button" scroll-to="#the-bottom">Scroll to the bottom!</button></p>
+    <p><button is="scroll-button" scroll-to="#the-bottom" easing="cubic-bezier(0.1, 0.7, 1.0, 0.1)">Scroll to the bottom!</button></p>
     <p><button is="scroll-button" scroll-to="#the-middle">Scroll to the middle!</button></p>
 
     <h1 id="the-top">This is the top!</h1>
@@ -66,20 +66,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'scroll-button',
       extends: 'button',
       behaviors: [
-        Polymer.NeonAnimationRunnerBehavior,
         AnimatedScrollBehavior
-      ],
-      listeners: {
-        // this event is fired when the animation finishes
-        'neon-animation-finish': '_onNeonAnimationFinish'
-      },
-      animate: function() {
-        // run page-scroll-animation
-        this.playAnimation();
-      },
-      _onNeonAnimationFinish: function() {
-        console.log('animation done!');
-      }
+      ]
     });
 
     </script>
